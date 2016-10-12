@@ -1,0 +1,60 @@
+# comments
+
+# functions
+
+def sum (x, y):
+	if x > 0 then 
+		x + sum(x-1, y) 
+	else 
+		y
+
+# external dll and import script
+
+# from standard library
+extern printf
+
+lib "math"
+	extern sin(x), cos(x)
+end
+
+import test
+
+def sincos(x): math.sin(x) * math.sin(y)
+
+# types
+# int, real, string, list, function, generator
+
+
+def list_empty(): []
+def list_builder(n):
+	if n == 0 then
+		[]
+	else
+		list_builder(n+1) + [n]
+
+def filter_odd(list):
+	if empty(list) then
+		list
+	else
+		let a = head(list), t = tail(list) in
+			if a % 2 == 0 then
+				[a] + filter_odd(t)
+			else 
+				filter_odd(t)
+
+# coroutine + generator
+
+def sum (start, end): reduce(x | x from start to end step 1, lambda(a,b): a + b )
+
+def sum (start, end):
+	let a = 0 in
+
+
+def sumtriangle(n):
+	reduce ({x+y | x: [1..n], y:[x..n]}, \a,b (a + b) )
+
+# generator: series, reduce, filter, for
+
+reduce x in [start..end, 1] as x*x with acc = acc + x
+
+def 
