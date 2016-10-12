@@ -24,7 +24,7 @@ namespace Token{
 
 class Lexer{
 public:
-	std::istream& stream;
+	std::istream* stream;
 
 	std::string identifier;
 	double number_value;
@@ -32,8 +32,11 @@ public:
 	int last_char;
 	int current;
 
-	Lexer(std::istream& _stream) : stream(_stream), last_char(' ') {}
+	Lexer(std::istream& stream) : stream(&stream), last_char(' ') {}
 	~Lexer(){}
+
+	void reset(std::istream& stream);
+
 	int next();
 
 private:

@@ -20,7 +20,7 @@ FLAGS += -O0 -g
 endif
 
 # modules
-INCLUDE_DIR=
+INCLUDE_DIR=/usr/include
 THIRD_PARTY_DIR=
 
 MODULES = lexer parser

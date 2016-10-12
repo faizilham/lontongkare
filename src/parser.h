@@ -2,18 +2,8 @@
 
 #include <memory>
 #include <vector>
+#include <cstddef>
 #include "lexer.h"
-
-class Parser{
-private:
-	Lexer lexer;
-public:
-
-	Parser(std::istream& stream): lexer(stream){}
-	~Parser(){}
-
-	void parse();
-};
 
 /*** AST ***/
 
@@ -71,4 +61,34 @@ public:
 	std::unique_ptr<ExprAST> body;
 	FunctionAST(std::unique_ptr<PrototypeAST> proto, std::unique_ptr<ExprAST> body)
 	: proto(std::move(proto)), body(std::move(body)) {}
+};
+
+/*** AST ***/
+
+class Parser{
+private:
+	Lexer lexer;
+	std::unique_ptr<ExprAST> error(const char *str);
+	std::unique_ptr<PrototypeAST> errorp(const char *str);
+	
+	std::unique_ptr<ExprAST> parse_number();
+	std::unique_ptr<ExprAST> parse_paren();
+	std::unique_ptr<ExprAST> parse_variable();
+	std::unique_ptr<ExprAST> parse_call_expr();
+	std::unique_ptr<ExprAST> parse_primary_expr();
+
+	std::unique_ptr<ExprAST> parse_binary_expr();
+	std::unique_ptr<ExprAST> parse_expr();
+	
+
+	std::unique_ptr<PrototypeAST> parse_proto();
+	std::unique_ptr<FunctionAST> parse_def();
+public:
+
+	Parser(std::istream& stream): lexer(stream){}
+	~Parser(){}
+
+	void change_input(std::istream& stream);
+
+	void parse();
 };

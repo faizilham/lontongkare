@@ -4,18 +4,23 @@ int Lexer::next(){
 	return current = gettoken();
 }
 
+void Lexer::reset(std::istream& _stream){
+	stream = &_stream;
+	last_char = ' ';
+}
+
 int Lexer::gettoken(){
 	int prev_char;
 
 	while(isspace(last_char)){
-		last_char = stream.get();
+		last_char = stream->get();
 	}
 
 	// identifier & command tokens
 	if (isalpha(last_char)){
 		identifier = last_char;
 
-		while (isalnum(last_char = stream.get())){
+		while (isalnum(last_char = stream->get())){
 			identifier += last_char;
 		}
 
@@ -32,14 +37,14 @@ int Lexer::gettoken(){
 		// read before .
 		do{
 			numstr += last_char;
-		} while (isdigit(last_char = stream.get()));
+		} while (isdigit(last_char = stream->get()));
 		
 
 		// read after .
 		if (last_char == '.'){
 			numstr += last_char;
 
-			while (isdigit(last_char = stream.get())){
+			while (isdigit(last_char = stream->get())){
 				numstr += last_char;
 			}
 		}
@@ -51,7 +56,7 @@ int Lexer::gettoken(){
 	// number token starts from comma or member operator
 	if (last_char == '.'){
 		prev_char = last_char;
-		last_char = stream.get();
+		last_char = stream->get();
 
 		// number token
 		if (isdigit(last_char)){
@@ -59,7 +64,7 @@ int Lexer::gettoken(){
 
 			numstr += prev_char + last_char;
 
-			while (isdigit(last_char = stream.get())){
+			while (isdigit(last_char = stream->get())){
 				numstr += last_char;
 			}
 		
@@ -73,7 +78,7 @@ int Lexer::gettoken(){
 	// skip comment until line break or EOF
 	if (last_char == '#') {
 		do {
-			last_char = stream.get();
+			last_char = stream->get();
 		} while (last_char != EOF && last_char != '\n' && last_char != '\r');
 
 		if (last_char != EOF)
@@ -85,6 +90,6 @@ int Lexer::gettoken(){
 
 	// output other as its char value
 	prev_char = last_char;
-	last_char = stream.get();
+	last_char = stream->get();
   	return prev_char;
 }
