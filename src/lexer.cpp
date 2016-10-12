@@ -5,6 +5,8 @@ int Lexer::next(){
 }
 
 int Lexer::gettoken(){
+	int prev_char;
+
 	while(isspace(last_char)){
 		last_char = stream.get();
 	}
@@ -46,6 +48,28 @@ int Lexer::gettoken(){
 		return Token::NUMBER;
 	}
 
+	// number token starts from comma or member operator
+	if (last_char == '.'){
+		prev_char = last_char;
+		last_char = stream.get();
+
+		// number token
+		if (isdigit(last_char)){
+			std::string numstr;
+
+			numstr += prev_char + last_char;
+
+			while (isdigit(last_char = stream.get())){
+				numstr += last_char;
+			}
+		
+			number_value = strtod(numstr.c_str(), 0);
+			return Token::NUMBER;
+		}
+
+		return '.';
+	}
+
 	// skip comment until line break or EOF
 	if (last_char == '#') {
 		do {
@@ -60,7 +84,7 @@ int Lexer::gettoken(){
 	if (last_char == EOF) return Token::_EOF;
 
 	// output other as its char value
-	int prev_char = last_char;
+	prev_char = last_char;
 	last_char = stream.get();
   	return prev_char;
 }
